@@ -6,14 +6,13 @@ class BackPropagation(Ann):
     def _sigmoid(x):
         return 1.0/(1.0+np.exp(-x))
 
-    def run(self, inputs, output_training, nn):
+    def run(self, inputs, output_training, nn, seasons, alfa):
 
         stopping = False
 
         layer_size = len(nn)
-        alfa = 1
 
-        while not stopping:
+        for season in range(seasons):
 
             z_input = [[0 for z_i in range(len(nn[z_i][0]))] for z_i in range(layer_size)]
             z = [[0 for z_i in range(len(nn[z_i][0]))] for z_i in range(layer_size)]
@@ -38,6 +37,8 @@ class BackPropagation(Ann):
                 # calculando erro
                 exit_layer = layer_size-1
 
+                # passo 6
+
                 delta_w = []
                 delta_ks = [0 for z_i in range(len(z[exit_layer]))]
 
@@ -53,17 +54,29 @@ class BackPropagation(Ann):
 
                 delta_input_js = [0, 0, 0]
 
+                # passo 7
+
                 for j, z_j in enumerate(delta_w):
                     for k, delta_k in enumerate(delta_ks):
                         delta_input_js[j] = delta_input_js[j] +  delta_k * delta_w[j][k]
-                        # print(delta_input_js[j], delta_w[j][k])
-                    print(delta_input_js[j])
 
-                    # error[layer][]
-            exit(2)
+                delta_v = []
+
+                for i, x_i in enumerate(input_val):  # TODO ficou estranho
+                    delta_v.append([])
+                    for delta_j in delta_input_js:
+                        delta_v[i].append(alfa * delta_j * x_i)
 
 
+                # passo 8
+                # TODO código duplicado os 2 seguintes for
+                for j, w in enumerate(nn[1]):
+                    for k, w_k in enumerate(w):
+                        nn[1][j][k] = nn[1][j][k] + delta_w[j][k]
 
+                for i, v in enumerate(nn[0]):
+                    for j, v_j in enumerate(v):
+                        nn[0][i][j]  = nn[0][i][j] + delta_v[i][j]
 
     def run2(self):
         pass

@@ -65,6 +65,8 @@ for i , value in enumerate(input_training_string):
 bp = BackPropagation()
 
 nn = bp.create_ann([3, 2])
+seasons = 3
+alfa = 1
 
 print("=========================== mock ===================")
 
@@ -93,6 +95,6 @@ output_training = [
     [0, 1]
 ]
 
-bp.run(input_training, output_training, nn)
+bp.run(input_training, output_training, nn, seasons, alfa)
 
 
