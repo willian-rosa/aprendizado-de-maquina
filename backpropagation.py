@@ -8,8 +8,6 @@ class BackPropagation(Ann):
 
     def run(self, inputs, output_training, nn, seasons, alfa):
 
-        stopping = False
-
         layer_size = len(nn)
 
         for season in range(seasons):
@@ -52,13 +50,13 @@ class BackPropagation(Ann):
                     for delta_k in delta_ks:
                         delta_w[j].append(alfa * delta_k * z_j)
 
-                delta_input_js = [0, 0, 0]
+                delta_input_js = [0 for z_i in range(63)] # ficou fixo
 
                 # passo 7
 
                 for j, z_j in enumerate(delta_w):
                     for k, delta_k in enumerate(delta_ks):
-                        delta_input_js[j] = delta_input_js[j] +  delta_k * delta_w[j][k]
+                        delta_input_js[j] = delta_input_js[j] + delta_k * delta_w[j][k]
 
                 delta_v = []
 
@@ -78,5 +76,34 @@ class BackPropagation(Ann):
                     for j, v_j in enumerate(v):
                         nn[0][i][j]  = nn[0][i][j] + delta_v[i][j]
 
-    def run2(self):
-        pass
+        return nn
+
+
+    def test(self, nn, input_line):
+
+        layer_size = len(nn)
+
+        z_input = [[0 for z_i in range(len(nn[z_i][0]))] for z_i in range(layer_size)]
+        z = [[0 for z_i in range(len(nn[z_i][0]))] for z_i in range(layer_size)]
+
+
+        for layer in range(layer_size):
+
+            if layer == 0:
+                input_layer = input_line
+            else:
+                input_layer = z[layer - 1]
+
+            for z_j in range(len(nn[layer][0])):
+                for i, x in enumerate(input_layer):  # cada caracter da letra
+                    z_input[layer][z_j] = z_input[layer][z_j] + x * nn[layer][i][z_j]
+
+                z[layer][z_j] = self._sigmoid(z_input[layer][z_j])
+
+        out = []
+
+        for y in z[layer_size-1]:
+            out.append(round(y, 2))
+
+        return out
+

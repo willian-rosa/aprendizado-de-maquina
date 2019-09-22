@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 class Ann:
 
@@ -27,3 +28,20 @@ class Ann:
                 )
 
         return network
+
+    @staticmethod
+    def save(trained):
+        f = open('nn_trained.txt', 'wb')
+        f.write(pickle.dumps(trained, protocol=0))
+        f.close()
+
+    @staticmethod
+    def load():
+        f = open('nn_trained.txt', 'rb')
+        trained = pickle.load(f)
+        f.close()
+
+        return trained
+
+
+

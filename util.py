@@ -3,15 +3,19 @@
 class Util:
 
     @staticmethod
-    def convert(text, convert):
+    def convert(text):
 
         map = []
 
+        hashtag = 1
+        dot = 0
+
         for char in text:
-            try:
-                if convert[char]:
-                    map.append(convert[char])
-            except ValueError:
+            if char == '#':
+                map.append(hashtag)
+            elif char == '.':
+                map.append(dot)
+            else:
                 map.append(0)
 
         return map

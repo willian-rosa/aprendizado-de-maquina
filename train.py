@@ -50,51 +50,21 @@ output_training_string = [
 ]
 
 
-convert = {
-    '#':  1,
-    '.': -1
-}
-
 input_training = []
 output_training = []
 
-for i , value in enumerate(input_training_string):
-    input_training.append(Util.convert(value, convert))
-    output_training.append(Util.convert(output_training_string[i], convert))
+for i, value in enumerate(input_training_string):
+    input_training.append(Util.convert(value))
+    output_training.append(Util.convert(output_training_string[i]))
 
 bp = BackPropagation()
 
-nn = bp.create_ann([3, 2])
-seasons = 3
+nn = bp.create_ann([63, 63, 7])
+seasons = 20
 alfa = 1
 
-print("=========================== mock ===================")
+nn_trained = bp.run(input_training, output_training, nn, seasons, alfa)
 
-nn = [
-    [
-        [0.1, 0, 0.1],
-        [0.3, 0.1, 0.9],
-        [0.5, 0.4, 1]
-    ],
-    [
-        [0.6, 0.3],
-        [0.5, 0.8],
-        [0.1, 0.3]
-    ]
-]
+bp.save(nn_trained)
 
-input_training = [
-    [1, 1, 0],
-    [1, 0, 0],
-    [0, 0, 1],
-]
-
-output_training = [
-    [1, 1],
-    [1, 1],
-    [0, 1]
-]
-
-bp.run(input_training, output_training, nn, seasons, alfa)
-
-
+print("Rede treinada e salva")
